@@ -1,4 +1,5 @@
 import pygame
+from settings import *
 from sys import exit 
 
 def displayScore():
@@ -9,10 +10,10 @@ def displayScore():
     return currentTime
 
 pygame.init()
-screen = pygame.display.set_mode((800,400))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Escape from snail")
 clock = pygame.time.Clock()
-fontType = pygame.font.Font('font/Pixeltype.ttf',40)
+fontType = pygame.font.Font('font/Pixeltype.ttf', FONT_SIZE)
 gameActive = False
 startTime = 0
 score = 0
@@ -21,18 +22,20 @@ skySurface = pygame.image.load('imgs/sky.png').convert()
 groundSurface = pygame.image.load('imgs/ground.png').convert()
 
 snail = pygame.image.load('imgs/snail.png').convert_alpha()
-snailRect = snail.get_rect(bottomright=(600,300))
+snailRect = snail.get_rect(bottomright=(SNAIL_POSITION_X, SNAIL_POSITION_Y))
 
-charWalk = pygame.image.load('imgs/charWalk1.png').convert_alpha()
-charWalkRect = charWalk.get_rect(bottomleft=(50,300))
-charGravity = 0
+playerWalk = pygame.image.load('./imgs/charWalk1.png').convert_alpha()
+playerWalkRect = playerWalk.get_rect(bottomleft=(PLAYER_POSITION_X, PLAYER_POSITION_Y))
+playerGravity = 0
 
-charStand = pygame.image.load('imgs/charStand.png').convert_alpha()
-charStandRect = charStand.get_rect(center = (400,200))
-charJump = pygame.image.load('imgs/charJump.png').convert_alpha()
-charJumpRect = charJump.get_rect(center = (500,200))
-charWalk2 = pygame.image.load('imgs/charWalk2.png').convert_alpha()
-charWalk2Rect = charWalk2.get_rect(center = (300,200))
+playerStand = pygame.image.load('imgs/charStand.png').convert_alpha()
+playerStandRect = playerStand.get_rect(center = (PLAYER_STAND_POSITION_X, PLAYER_STAND_POSITION_Y))
+
+playerJump = pygame.image.load('imgs/charJump.png').convert_alpha()
+playerJumpRect = playerJump.get_rect(center = (PLAYER_JUMP_POSITION_X, PLAYER_JUMP_POSITION_Y))
+
+playerWalk2 = pygame.image.load('imgs/charWalk2.png').convert_alpha()
+playerWalk2Rect = playerWalk2.get_rect(center = (300,200))
 
 gameName = fontType.render("Escape from snail",False,"darkgreen")
 gameNameRect = gameName.get_rect(center = (400,120))
@@ -48,11 +51,11 @@ while True:
         
         if gameActive:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if (charWalkRect.collidepoint(event.pos)) and (charWalkRect.bottom >= 301):
+                if (playerWalk.collidepoint(event.pos)) and (playerWalk.bottom >= 301):
                     charGravity = -20
 
             if event.type == pygame.KEYDOWN:
-                if (event.key == pygame.K_SPACE) and (charWalkRect.bottom >= 301):
+                if (event.key == pygame.K_SPACE) and (playerWalk.bottom >= 301):
                     charGravity = -20    
 
         else: 
@@ -72,21 +75,21 @@ while True:
         screen.blit(snail,snailRect)
 
         charGravity += 1
-        charWalkRect.y += charGravity
-        if charWalkRect.bottom >= 301:
-            charWalkRect.bottom = 301
-        screen.blit(charWalk,charWalkRect)
+        playerWalk.y += charGravity
+        if playerWalk.bottom >= 301:
+            playerWalk.bottom = 301
+        screen.blit(playerWalk,playerWalk)
 
         # snail touch the player
-        if snailRect.colliderect(charWalkRect):
+        if snailRect.colliderect(playerWalk):
             gameActive = False
 
     else: 
-        screen.fill((94,129,162))
-        screen.blit(charStand,charStandRect)
-        screen.blit(charJump,charJumpRect)
-        screen.blit(charWalk2,charWalk2Rect)
-        screen.blit(gameName,gameNameRect)
+        screen.fill((94, 129, 162))
+        screen.blit(playerStand, playerStandRect)
+        screen.blit(playerJump, playerJumpRect)
+        screen.blit(playerWalk2, playerWalk2Rect)
+        screen.blit(gameName, gameNameRect)
 
         scoreMsg = fontType.render(f"Your Score: {score}",False,("yellow"))
         scoreMsgRect =  scoreMsg.get_rect(center = (400,330))
@@ -97,4 +100,4 @@ while True:
             screen.blit(scoreMsg,scoreMsgRect)
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(FPS)
