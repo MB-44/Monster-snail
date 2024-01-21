@@ -35,13 +35,13 @@ playerJump = pygame.image.load('imgs/charJump.png').convert_alpha()
 playerJumpRect = playerJump.get_rect(center = (PLAYER_JUMP_POSITION_X, PLAYER_JUMP_POSITION_Y))
 
 playerWalk2 = pygame.image.load('imgs/charWalk2.png').convert_alpha()
-playerWalk2Rect = playerWalk2.get_rect(center = (300,200))
+playerWalk2Rect = playerWalk2.get_rect(center = (300, 200))
 
-gameName = fontType.render("Escape from snail",False,"darkgreen")
-gameNameRect = gameName.get_rect(center = (400,120))
+gameName = fontType.render("Escape from snail", False, "darkgreen")
+gameNameRect = gameName.get_rect(center = (400, 120))
 
-gameMsg = fontType.render("-- PRESS SPACE TO START --",False,(111,196,169))
-gameMsgRect = gameMsg.get_rect(center=(400,300))
+gameMsg = fontType.render("-- PRESS SPACE TO START --", False, (111, 196, 169))
+gameMsgRect = gameMsg.get_rect(center=(400, 300))
 
 while True:
     for event in pygame.event.get():
@@ -52,11 +52,11 @@ while True:
         if gameActive:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if (playerWalk.collidepoint(event.pos)) and (playerWalk.bottom >= 301):
-                    charGravity = -20
+                    playerGravity = -20
 
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_SPACE) and (playerWalk.bottom >= 301):
-                    charGravity = -20    
+                    playerGravity = -20    
 
         else: 
             if event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE):
@@ -65,20 +65,20 @@ while True:
                 startTime  = int(pygame.time.get_ticks()/1000)
 
     if gameActive:
-        screen.blit(skySurface,(0,0))
-        screen.blit(groundSurface,(0,301))   
+        screen.blit(skySurface,(0, 0))
+        screen.blit(groundSurface,(0, 301))   
         score = displayScore()
 
         snailRect.x -= 5 
         if snailRect.left < 1:
             snailRect.right = 800
-        screen.blit(snail,snailRect)
+        screen.blit(snail, snailRect)
 
-        charGravity += 1
-        playerWalk.y += charGravity
+        playerGravity += 1
+        playerWalk.y += playerGravity
         if playerWalk.bottom >= 301:
             playerWalk.bottom = 301
-        screen.blit(playerWalk,playerWalk)
+        screen.blit(playerWalk, playerWalk)
 
         # snail touch the player
         if snailRect.colliderect(playerWalk):
@@ -91,13 +91,13 @@ while True:
         screen.blit(playerWalk2, playerWalk2Rect)
         screen.blit(gameName, gameNameRect)
 
-        scoreMsg = fontType.render(f"Your Score: {score}",False,("yellow"))
-        scoreMsgRect =  scoreMsg.get_rect(center = (400,330))
+        scoreMsg = fontType.render(f"Your Score: {score}", False, ("yellow"))
+        scoreMsgRect =  scoreMsg.get_rect(center = (400, 330))
 
         if score == 0:
-            screen.blit(gameMsg,gameMsgRect)
+            screen.blit(gameMsg, gameMsgRect)
         else: 
-            screen.blit(scoreMsg,scoreMsgRect)
+            screen.blit(scoreMsg, scoreMsgRect)
 
     pygame.display.update()
     clock.tick(FPS)
